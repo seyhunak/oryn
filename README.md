@@ -30,6 +30,16 @@ human to approve it.
 It works fully without any AI provider. Plug in Anthropic Claude, OpenAI, Azure OpenAI,
 Gemini, Ollama or any OpenAI-compatible endpoint when you want help.
 
+## Screenshots
+
+![Overview: pass rate, executions, flaky scenarios and the latest failures across projects](docs/images/overview.png)
+
+| Test Studio | Execution detail | Quality Intelligence |
+| --- | --- | --- |
+| [![Test Studio: Gherkin editor with live validation and per-scenario approval](docs/images/test-studio.png)](docs/images/test-studio.png) | [![Execution detail: scenario results and deterministic failure investigations](docs/images/execution-detail.png)](docs/images/execution-detail.png) | [![Quality Intelligence: pass rate, failure rate, flakiness and outcomes per day](docs/images/quality.png)](docs/images/quality.png) |
+
+Screenshots show the seeded Northwind demo project (`make demo`).
+
 ## What it does
 
 | Area | What you get |
