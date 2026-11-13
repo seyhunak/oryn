@@ -1,0 +1,22 @@
+# Only the web service is exposed; it proxies /api to the API service. Long-lived SSE
+# streams (/api/v1/executions/*/events) need a generous read timeout.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: oryn
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-body-size: "200m"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts: [oryn.example.com]
+      secretName: oryn-tls
+  rules:
+    - host: oryn.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend: { service: { name: web, port: { number: 3000 } } }

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: api }
+spec:
+  # Replicas share Postgres (queue, sessions) and Redis (rate limits). Artifacts live on
+  # the shared volume below; use ReadWriteMany storage when running more than one.
+  replicas: 1
+  selector: { matchLabels: { app: api } }
+  template:
+    metadata: { labels: { app: api } }
+    spec:
+      securityContext: { runAsNonRoot: true, runAsUser: 10001, fsGroup: 10001 }
+      initContainers:
+        - name: migrate
+          image: ghcr.io/oryn-dev/oryn-api
+          # Applies migrations and exits (the API would also migrate on start; running it
+          # first keeps rolling updates from racing on schema changes).
+          command: ["/usr/local/bin/oryn-migrate"]
+          envFrom: [{ secretRef: { name: oryn-secrets } }]
+      containers:
+        - name: api
+          image: ghcr.io/oryn-dev/oryn-api
+          envFrom: [{ secretRef: { name: oryn-secrets } }, { configMapRef: { name: oryn-config } }]
+          ports: [{ containerPort: 8080, name: http }]
+          readinessProbe: { httpGet: { path: /readyz, port: http }, periodSeconds: 10 }
+          livenessProbe: { httpGet: { path: /healthz, port: http }, periodSeconds: 20 }
+          volumeMounts: [{ name: data, mountPath: /data }]
+          resources:
+            requests: { cpu: 200m, memory: 256Mi }
+            limits: { memory: 1Gi }
+          securityContext: { allowPrivilegeEscalation: false, readOnlyRootFilesystem: true, capabilities: { drop: [ALL] } }
+      volumes:
+        - name: data
+          persistentVolumeClaim: { claimName: oryn-data }
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: { name: oryn-data }
+spec:
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 50Gi } }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: api }
+spec:
+  selector: { app: api }
+  ports: [{ port: 8080, targetPort: http, name: http }]

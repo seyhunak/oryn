@@ -1,0 +1,30 @@
+# Rust build output
+/target/
+
+# Node dependencies and build output
+node_modules/
+.next/
+dist/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# Local configuration and secrets (copy .env.example instead)
+.env
+.env.*
+!.env.example
+
+# Runtime data written by a local API (artifacts, cloned repositories)
+/data/
+
+# Design-tool caches
+.hallmark/
+
+# Editors and OS files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local tooling config (machine-specific paths)
+.claude/

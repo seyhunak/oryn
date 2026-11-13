@@ -1,0 +1,115 @@
+# ORYN local stack.
+#
+#   docker compose up -d postgres redis          # dependencies only (for `make dev`)
+#   docker compose --profile app up -d --build   # the whole platform + demo app
+#
+# Everything binds to localhost. Change ORYN_SECRET_KEY and the bootstrap token before
+# exposing this anywhere (see .env.example and docs/DEPLOYMENT.md).
+name: oryn
+
+x-rust-env: &rust-env
+  RUST_LOG: ${RUST_LOG:-info,oryn=debug}
+  ORYN_LOG_FORMAT: json
+  OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: oryn
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-oryn}
+      POSTGRES_DB: oryn
+    ports: ["127.0.0.1:${ORYN_PG_PORT:-55433}:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U oryn -d oryn"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports: ["127.0.0.1:${ORYN_REDIS_PORT:-56380}:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build: { context: ., dockerfile: infrastructure/docker/api.Dockerfile }
+    image: ghcr.io/oryn-dev/oryn-api:${ORYN_VERSION:-latest}
+    profiles: [app]
+    environment:
+      <<: *rust-env
+      DATABASE_URL: postgres://oryn:${POSTGRES_PASSWORD:-oryn}@postgres:5432/oryn
+      REDIS_URL: redis://redis:6379
+      ORYN_SECRET_KEY: ${ORYN_SECRET_KEY:-change-me-to-a-long-random-secret-key-0123}
+      ORYN_WORKER_BOOTSTRAP_TOKEN: ${ORYN_WORKER_BOOTSTRAP_TOKEN:-dev-worker-bootstrap-token}
+      ORYN_PUBLIC_URL: ${ORYN_PUBLIC_URL:-http://localhost:3000}
+      ORYN_COOKIE_SECURE: "false"
+      # The demo app and runner live on the compose network (private addresses).
+      ORYN_ALLOW_PRIVATE_NETWORK: ${ORYN_ALLOW_PRIVATE_NETWORK:-true}
+      # Read-only directory local repository imports may read from.
+      ORYN_LOCAL_IMPORT_ROOT: /import
+      ORYN_RECORDER_URL: http://playwright-runner:7400
+      ORYN_RECORDER_TOKEN: ${ORYN_RUNNER_TOKEN:-dev-runner-token}
+    ports: ["127.0.0.1:${ORYN_API_PORT:-8080}:8080"]
+    volumes:
+      - oryndata:/data
+      - ./examples:/import:ro
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+
+  worker:
+    build: { context: ., dockerfile: infrastructure/docker/worker.Dockerfile }
+    image: ghcr.io/oryn-dev/oryn-worker:${ORYN_VERSION:-latest}
+    profiles: [app]
+    environment:
+      <<: *rust-env
+      ORYN_API_URL: http://api:8080
+      ORYN_WORKER_BOOTSTRAP_TOKEN: ${ORYN_WORKER_BOOTSTRAP_TOKEN:-dev-worker-bootstrap-token}
+      ORYN_WORKER_NAME: compose-worker-1
+      ORYN_WORKER_CONCURRENCY: "2"
+      ORYN_RUNNER_URL: http://playwright-runner:7400
+      ORYN_RUNNER_TOKEN: ${ORYN_RUNNER_TOKEN:-dev-runner-token}
+    volumes: [workerstate:/state]
+    depends_on:
+      api: { condition: service_healthy }
+      playwright-runner: { condition: service_healthy }
+
+  playwright-runner:
+    build: { context: adapters/playwright-runner }
+    image: ghcr.io/oryn-dev/oryn-playwright-runner:${ORYN_VERSION:-latest}
+    profiles: [app]
+    environment:
+      PORT: "7400"
+      MAX_CONCURRENCY: "2"
+      RUNNER_TOKEN: ${ORYN_RUNNER_TOKEN:-dev-runner-token}
+    shm_size: 1gb
+
+  web:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/web.Dockerfile
+      args: { ORYN_API_INTERNAL_URL: http://api:8080 }
+    image: ghcr.io/oryn-dev/oryn-web:${ORYN_VERSION:-latest}
+    profiles: [app]
+    ports: ["127.0.0.1:${ORYN_WEB_PORT:-3000}:3000"]
+    depends_on:
+      api: { condition: service_healthy }
+
+  demo-app:
+    build: { context: examples/demo-application }
+    image: ghcr.io/oryn-dev/northwind-supply:${ORYN_VERSION:-latest}
+    profiles: [app, demo]
+    environment:
+      PORT: "4000"
+      DEMO_FLAKY: "1"
+    ports: ["127.0.0.1:${ORYN_DEMO_PORT:-4000}:4000"]
+
+volumes:
+  pgdata:
+  oryndata:
+  workerstate:

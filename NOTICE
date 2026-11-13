@@ -1,0 +1,6 @@
+ORYN
+Copyright 2026 The ORYN contributors
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+Third-party components keep their own licenses; see each package manifest
+(Cargo.lock, apps/web/pnpm-lock.yaml, adapters/playwright-runner/package-lock.json).

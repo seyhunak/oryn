@@ -1,0 +1,41 @@
+# Single-replica Postgres with pgvector for evaluation. Use a managed, backed-up
+# database in production and delete this file from the kustomization.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector: { matchLabels: { app: postgres } }
+  template:
+    metadata: { labels: { app: postgres } }
+    spec:
+      containers:
+        - name: postgres
+          image: pgvector/pgvector:pg17
+          env:
+            - { name: POSTGRES_USER, value: oryn }
+            - { name: POSTGRES_DB, value: oryn }
+            - name: POSTGRES_PASSWORD
+              valueFrom: { secretKeyRef: { name: oryn-secrets, key: POSTGRES_PASSWORD } }
+            - { name: PGDATA, value: /var/lib/postgresql/data/pgdata }
+          ports: [{ containerPort: 5432 }]
+          readinessProbe:
+            exec: { command: ["pg_isready", "-U", "oryn", "-d", "oryn"] }
+            periodSeconds: 5
+          volumeMounts: [{ name: data, mountPath: /var/lib/postgresql/data }]
+          resources:
+            requests: { cpu: 250m, memory: 512Mi }
+  volumeClaimTemplates:
+    - metadata: { name: data }
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources: { requests: { storage: 20Gi } }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: postgres }
+spec:
+  selector: { app: postgres }
+  ports: [{ port: 5432 }]

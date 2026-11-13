@@ -1,0 +1,55 @@
+[package]
+name = "oryn-api"
+description = "ORYN control plane: REST API, auth, RBAC, worker protocol, SSE and background jobs"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "oryn-api"
+path = "src/main.rs"
+
+[dependencies]
+oryn-domain = { workspace = true }
+oryn-observability = { workspace = true }
+oryn-auth = { workspace = true }
+oryn-db = { workspace = true }
+oryn-artifacts = { workspace = true }
+oryn-bdd = { workspace = true }
+oryn-execution = { workspace = true }
+oryn-api-engine = { workspace = true }
+oryn-model-gateway = { workspace = true }
+oryn-intelligence = { workspace = true }
+axum = { workspace = true }
+axum-extra = { workspace = true }
+tower = { workspace = true }
+tower-http = { workspace = true }
+tokio = { workspace = true }
+tokio-stream = { workspace = true }
+futures = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+sqlx = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+utoipa = { workspace = true }
+utoipa-axum = { workspace = true }
+reqwest = { workspace = true }
+redis = { workspace = true }
+url = { workspace = true }
+ipnet = { workspace = true }
+base64 = { workspace = true }
+sha2 = { workspace = true }
+rand = { workspace = true }
+once_cell = { workspace = true }
+regex = { workspace = true }
+
+[dev-dependencies]
+tower = { workspace = true }
+tokio-util = { workspace = true }
+tempfile = { workspace = true }
+http-body-util = "0.1"

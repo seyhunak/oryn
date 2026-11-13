@@ -1,0 +1,16 @@
+{
+  "name": "northwind-supply-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Northwind Supply: a small hardware-store demo application used to demonstrate ORYN.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test"
+  }
+}

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: playwright-runner }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: playwright-runner } }
+  template:
+    metadata: { labels: { app: playwright-runner } }
+    spec:
+      containers:
+        - name: runner
+          image: ghcr.io/oryn-dev/oryn-playwright-runner
+          env:
+            - { name: PORT, value: "7400" }
+            - { name: MAX_CONCURRENCY, value: "2" }
+            - name: RUNNER_TOKEN
+              valueFrom: { secretKeyRef: { name: oryn-secrets, key: ORYN_RUNNER_TOKEN } }
+          ports: [{ containerPort: 7400, name: http }]
+          readinessProbe: { httpGet: { path: /v1/health, port: http }, periodSeconds: 15 }
+          resources:
+            requests: { cpu: "1", memory: 1Gi }
+            limits: { memory: 3Gi }
+          volumeMounts: [{ name: dshm, mountPath: /dev/shm }]
+      volumes:
+        # Chromium needs a larger /dev/shm than the container default.
+        - name: dshm
+          emptyDir: { medium: Memory, sizeLimit: 1Gi }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: playwright-runner }
+spec:
+  selector: { app: playwright-runner }
+  ports: [{ port: 7400, targetPort: http }]

@@ -1,0 +1,22 @@
+[package]
+name = "oryn-api-engine"
+description = "ORYN's REST API testing engine: requests, assertions, JSONPath, JSON Schema, variables"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+oryn-domain = { workspace = true }
+reqwest = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_json_path = { workspace = true }
+jsonschema = { workspace = true }
+url = { workspace = true }
+tokio = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+axum = { workspace = true }

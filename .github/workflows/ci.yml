@@ -1,0 +1,126 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: -D warnings
+
+jobs:
+  rust:
+    name: Rust (fmt, clippy, tests)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env: { POSTGRES_USER: oryn, POSTGRES_PASSWORD: oryn, POSTGRES_DB: oryn }
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U oryn -d oryn" --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      DATABASE_URL: postgres://oryn:oryn@localhost:5432/oryn
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with: { components: "rustfmt, clippy" }
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --all --check
+      - run: cargo clippy --workspace --all-targets --locked -- -D warnings
+      # Model calls are served by the deterministic mock provider and local mock
+      # servers; no AI credentials are used in CI.
+      - run: cargo test --workspace --locked
+
+  web:
+    name: Web (types, lint, unit tests, build)
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: apps/web } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { package_json_file: apps/web/package.json }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm, cache-dependency-path: apps/web/pnpm-lock.yaml }
+      - run: pnpm install --frozen-lockfile
+      - name: Generated API types are current
+        run: pnpm api:types && git diff --exit-code lib/api/schema.d.ts
+      - run: pnpm lint
+      - run: pnpm test
+      - run: pnpm build
+
+  runner:
+    name: Playwright runner
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: adapters/playwright-runner } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: adapters/playwright-runner/package-lock.json }
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run typecheck
+      - run: npm test
+
+  demo:
+    name: Demo application
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: examples/demo-application } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm test
+
+  e2e:
+    name: End to end (compose stack + demo suites)
+    runs-on: ubuntu-latest
+    needs: [rust, web, runner]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Start the stack
+        run: docker compose --profile app up -d --build --wait
+      - name: Seed and run every demo suite
+        run: ORYN_URL=http://localhost:8080 DEMO_BASE_URL=http://demo-app:4000 node scripts/seed.mjs --run
+      - name: Verify the planted defects are detected and everything else passes
+        run: node scripts/verify-demo.mjs
+      - name: Logs on failure
+        if: failure()
+        run: docker compose --profile app logs --tail=200
+
+  docker:
+    name: Docker images
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [rust, web, runner, demo, e2e]
+    permissions: { contents: read, packages: write }
+    strategy:
+      matrix:
+        include:
+          - { name: oryn-api, file: infrastructure/docker/api.Dockerfile, context: . }
+          - { name: oryn-worker, file: infrastructure/docker/worker.Dockerfile, context: . }
+          - { name: oryn-web, file: infrastructure/docker/web.Dockerfile, context: . }
+          - { name: oryn-playwright-runner, file: adapters/playwright-runner/Dockerfile, context: adapters/playwright-runner }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with: { registry: ghcr.io, username: "${{ github.actor }}", password: "${{ secrets.GITHUB_TOKEN }}" }
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.file }}
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.name }}:latest,ghcr.io/${{ github.repository_owner }}/${{ matrix.name }}:${{ github.sha }}
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}

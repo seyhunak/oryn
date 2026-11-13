@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: oryn
+  labels:
+    pod-security.kubernetes.io/enforce: baseline

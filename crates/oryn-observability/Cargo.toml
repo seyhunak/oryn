@@ -1,0 +1,16 @@
+[package]
+name = "oryn-observability"
+description = "Structured logging, tracing and OpenTelemetry setup shared by ORYN binaries"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+opentelemetry = { workspace = true }
+opentelemetry_sdk = { workspace = true }
+opentelemetry-otlp = { workspace = true }
+tracing-opentelemetry = { workspace = true }
+anyhow = { workspace = true }

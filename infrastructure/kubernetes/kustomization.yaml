@@ -1,0 +1,27 @@
+# ORYN on Kubernetes (evaluation-grade base). Apply with:
+#   kubectl apply -k infrastructure/kubernetes
+# For production, point DATABASE_URL at a managed Postgres with pgvector, replace the
+# secret, put the web service behind TLS, and set ORYN_COOKIE_SECURE=true.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: oryn
+resources:
+  - namespace.yaml
+  - secret.example.yaml
+  - config.yaml
+  - postgres.yaml
+  - redis.yaml
+  - api.yaml
+  - worker.yaml
+  - runner.yaml
+  - web.yaml
+  - ingress.yaml
+images:
+  - name: ghcr.io/oryn-dev/oryn-api
+    newTag: latest
+  - name: ghcr.io/oryn-dev/oryn-worker
+    newTag: latest
+  - name: ghcr.io/oryn-dev/oryn-web
+    newTag: latest
+  - name: ghcr.io/oryn-dev/oryn-playwright-runner
+    newTag: latest

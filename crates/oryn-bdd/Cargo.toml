@@ -1,0 +1,17 @@
+[package]
+name = "oryn-bdd"
+description = "Gherkin parsing and compilation of BDD scenarios into ORYN's executable step model"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+oryn-domain = { workspace = true }
+gherkin = { workspace = true }
+regex = { workspace = true }
+once_cell = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+utoipa = { workspace = true }

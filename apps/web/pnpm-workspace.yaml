@@ -1,0 +1,2 @@
+# Supply-chain policy: never install a package version published less than a day ago.
+minimumReleaseAge: 1440

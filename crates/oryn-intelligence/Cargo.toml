@@ -1,0 +1,29 @@
+[package]
+name = "oryn-intelligence"
+description = "Repository analysis, safe import, test planning, failure investigation and regression impact"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+oryn-domain = { workspace = true }
+oryn-auth = { workspace = true }
+oryn-bdd = { workspace = true }
+oryn-model-gateway = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+regex = { workspace = true }
+once_cell = { workspace = true }
+walkdir = { workspace = true }
+zip = { workspace = true }
+url = { workspace = true }
+base64 = { workspace = true }
+tokio = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+utoipa = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }

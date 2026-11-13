@@ -1,0 +1,24 @@
+[package]
+name = "oryn-model-gateway"
+description = "Provider-independent model gateway: OpenAI, Anthropic, Gemini, Azure OpenAI, Ollama, OpenAI-compatible and a deterministic mock"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+oryn-domain = { workspace = true }
+oryn-auth = { workspace = true }
+async-trait = { workspace = true }
+reqwest = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+jsonschema = { workspace = true }
+tokio = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+regex = { workspace = true }
+url = { workspace = true }
+
+[dev-dependencies]
+axum = { workspace = true }

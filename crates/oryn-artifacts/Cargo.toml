@@ -1,0 +1,18 @@
+[package]
+name = "oryn-artifacts"
+description = "Artifact storage abstraction (local filesystem; S3-compatible as an extension)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+async-trait = { workspace = true }
+tokio = { workspace = true }
+thiserror = { workspace = true }
+uuid = { workspace = true }
+sha2 = { workspace = true }
+hex = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }

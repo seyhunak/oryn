@@ -1,0 +1,22 @@
+[package]
+name = "oryn-auth"
+description = "Password hashing, session/API tokens, secret encryption and redaction for ORYN"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+argon2 = { workspace = true }
+aes-gcm = { workspace = true }
+sha2 = { workspace = true }
+hmac = { workspace = true }
+base64 = { workspace = true }
+rand = { workspace = true }
+hex = { workspace = true }
+regex = { workspace = true }
+once_cell = { workspace = true }
+thiserror = { workspace = true }
+reqwest = { workspace = true }
+tokio = { workspace = true }
+url = { workspace = true }
