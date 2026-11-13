@@ -14,7 +14,7 @@ spec:
       terminationGracePeriodSeconds: 330
       containers:
         - name: worker
-          image: ghcr.io/oryn-dev/oryn-worker
+          image: ghcr.io/seyhunak/oryn-worker
           envFrom: [{ configMapRef: { name: oryn-config } }]
           env:
             - name: ORYN_WORKER_BOOTSTRAP_TOKEN

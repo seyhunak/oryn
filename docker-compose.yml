@@ -38,7 +38,7 @@ services:
 
   api:
     build: { context: ., dockerfile: infrastructure/docker/api.Dockerfile }
-    image: ghcr.io/oryn-dev/oryn-api:${ORYN_VERSION:-latest}
+    image: ghcr.io/seyhunak/oryn-api:${ORYN_VERSION:-latest}
     profiles: [app]
     environment:
       <<: *rust-env
@@ -64,7 +64,7 @@ services:
 
   worker:
     build: { context: ., dockerfile: infrastructure/docker/worker.Dockerfile }
-    image: ghcr.io/oryn-dev/oryn-worker:${ORYN_VERSION:-latest}
+    image: ghcr.io/seyhunak/oryn-worker:${ORYN_VERSION:-latest}
     profiles: [app]
     environment:
       <<: *rust-env
@@ -81,7 +81,7 @@ services:
 
   playwright-runner:
     build: { context: adapters/playwright-runner }
-    image: ghcr.io/oryn-dev/oryn-playwright-runner:${ORYN_VERSION:-latest}
+    image: ghcr.io/seyhunak/oryn-playwright-runner:${ORYN_VERSION:-latest}
     profiles: [app]
     environment:
       PORT: "7400"
@@ -94,7 +94,7 @@ services:
       context: .
       dockerfile: infrastructure/docker/web.Dockerfile
       args: { ORYN_API_INTERNAL_URL: http://api:8080 }
-    image: ghcr.io/oryn-dev/oryn-web:${ORYN_VERSION:-latest}
+    image: ghcr.io/seyhunak/oryn-web:${ORYN_VERSION:-latest}
     profiles: [app]
     ports: ["127.0.0.1:${ORYN_WEB_PORT:-3000}:3000"]
     depends_on:
@@ -102,7 +102,7 @@ services:
 
   demo-app:
     build: { context: examples/demo-application }
-    image: ghcr.io/oryn-dev/northwind-supply:${ORYN_VERSION:-latest}
+    image: ghcr.io/seyhunak/northwind-supply:${ORYN_VERSION:-latest}
     profiles: [app, demo]
     environment:
       PORT: "4000"

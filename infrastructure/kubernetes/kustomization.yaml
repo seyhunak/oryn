@@ -17,11 +17,11 @@ resources:
   - web.yaml
   - ingress.yaml
 images:
-  - name: ghcr.io/oryn-dev/oryn-api
+  - name: ghcr.io/seyhunak/oryn-api
     newTag: latest
-  - name: ghcr.io/oryn-dev/oryn-worker
+  - name: ghcr.io/seyhunak/oryn-worker
     newTag: latest
-  - name: ghcr.io/oryn-dev/oryn-web
+  - name: ghcr.io/seyhunak/oryn-web
     newTag: latest
-  - name: ghcr.io/oryn-dev/oryn-playwright-runner
+  - name: ghcr.io/seyhunak/oryn-playwright-runner
     newTag: latest

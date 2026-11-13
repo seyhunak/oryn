@@ -12,14 +12,14 @@ spec:
       securityContext: { runAsNonRoot: true, runAsUser: 10001, fsGroup: 10001 }
       initContainers:
         - name: migrate
-          image: ghcr.io/oryn-dev/oryn-api
+          image: ghcr.io/seyhunak/oryn-api
           # Applies migrations and exits (the API would also migrate on start; running it
           # first keeps rolling updates from racing on schema changes).
           command: ["/usr/local/bin/oryn-migrate"]
           envFrom: [{ secretRef: { name: oryn-secrets } }]
       containers:
         - name: api
-          image: ghcr.io/oryn-dev/oryn-api
+          image: ghcr.io/seyhunak/oryn-api
           envFrom: [{ secretRef: { name: oryn-secrets } }, { configMapRef: { name: oryn-config } }]
           ports: [{ containerPort: 8080, name: http }]
           readinessProbe: { httpGet: { path: /readyz, port: http }, periodSeconds: 10 }

@@ -9,7 +9,7 @@ spec:
     spec:
       containers:
         - name: runner
-          image: ghcr.io/oryn-dev/oryn-playwright-runner
+          image: ghcr.io/seyhunak/oryn-playwright-runner
           env:
             - { name: PORT, value: "7400" }
             - { name: MAX_CONCURRENCY, value: "2" }

@@ -6,7 +6,7 @@
 
 Self-hosted, open-source quality engineering with AI that reasons and a Rust engine that proves.
 
-[![CI](https://github.com/oryn-dev/oryn/actions/workflows/ci.yml/badge.svg)](https://github.com/oryn-dev/oryn/actions/workflows/ci.yml)
+[![CI](https://github.com/seyhunak/oryn/actions/workflows/ci.yml/badge.svg)](https://github.com/seyhunak/oryn/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-1d3a31.svg)](LICENSE)
 [![Rust](https://img.shields.io/badge/rust-1.85%2B-1d3a31?logo=rust)](https://www.rust-lang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-16-1d3a31?logo=nextdotjs)](https://nextjs.org/)
@@ -49,7 +49,7 @@ Gemini, Ollama or any OpenAI-compatible endpoint when you want help.
 You need Docker with Compose.
 
 ```bash
-git clone https://github.com/oryn-dev/oryn.git
+git clone https://github.com/seyhunak/oryn.git
 cd oryn
 cp .env.example .env    # set ORYN_SECRET_KEY before exposing anything
 make up                 # builds and starts everything, then seeds the demo project

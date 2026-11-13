@@ -4,10 +4,10 @@ ORYN is five processes plus two data stores:
 
 | Component | Image / build | Stateful |
 |---|---|---|
-| API (`oryn-api`) | `ghcr.io/oryn-dev/oryn-api`, [`infrastructure/docker/api.Dockerfile`](../infrastructure/docker/api.Dockerfile) | Artifacts and repository working copies under `/data` |
-| Worker (`oryn-worker`) | `ghcr.io/oryn-dev/oryn-worker`, [`worker.Dockerfile`](../infrastructure/docker/worker.Dockerfile) | Token file under `/state` (self-registered workers only) |
-| Playwright runner | `ghcr.io/oryn-dev/oryn-playwright-runner`, [`adapters/playwright-runner/Dockerfile`](../adapters/playwright-runner/Dockerfile) | No |
-| Web (Next.js) | `ghcr.io/oryn-dev/oryn-web`, [`web.Dockerfile`](../infrastructure/docker/web.Dockerfile) | No |
+| API (`oryn-api`) | `ghcr.io/seyhunak/oryn-api`, [`infrastructure/docker/api.Dockerfile`](../infrastructure/docker/api.Dockerfile) | Artifacts and repository working copies under `/data` |
+| Worker (`oryn-worker`) | `ghcr.io/seyhunak/oryn-worker`, [`worker.Dockerfile`](../infrastructure/docker/worker.Dockerfile) | Token file under `/state` (self-registered workers only) |
+| Playwright runner | `ghcr.io/seyhunak/oryn-playwright-runner`, [`adapters/playwright-runner/Dockerfile`](../adapters/playwright-runner/Dockerfile) | No |
+| Web (Next.js) | `ghcr.io/seyhunak/oryn-web`, [`web.Dockerfile`](../infrastructure/docker/web.Dockerfile) | No |
 | PostgreSQL 15+ with pgvector | `pgvector/pgvector:pg17` in Compose | Yes |
 | Redis 7 (optional) | `redis:7-alpine` | No (rate-limit counters only) |
 

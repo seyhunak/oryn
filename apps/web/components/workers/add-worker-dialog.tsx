@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
 import { CopyField, ShownOnce } from "@/components/settings/copy-field";
 
-export const WORKER_IMAGE = "ghcr.io/oryn-dev/oryn-worker:latest";
+export const WORKER_IMAGE = "ghcr.io/seyhunak/oryn-worker:latest";
 const RUNNER_PLACEHOLDER = "http://playwright-runner:7400";
 
 function apiOrigin() {

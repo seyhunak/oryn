@@ -11,7 +11,7 @@ spec:
       containers:
         - name: web
           # Built with --build-arg ORYN_API_INTERNAL_URL=http://api:8080 (the default).
-          image: ghcr.io/oryn-dev/oryn-web
+          image: ghcr.io/seyhunak/oryn-web
           ports: [{ containerPort: 3000, name: http }]
           readinessProbe: { httpGet: { path: /login, port: http }, periodSeconds: 15 }
           resources:

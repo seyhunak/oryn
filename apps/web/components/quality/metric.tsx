@@ -1,6 +1,6 @@
 export type MetricAnchor = "pass-rate" | "failure-rate" | "flakiness" | "coverage" | "mean-duration";
 
-export const METRICS_DOC = "https://github.com/oryn-dev/oryn/blob/main/docs/METRICS.md";
+export const METRICS_DOC = "https://github.com/seyhunak/oryn/blob/main/docs/METRICS.md";
 
 /** Every figure links to its documented calculation (design.md § Data visualisation). */
 export function MetricLink({ anchor, className }: { anchor: MetricAnchor; className?: string }) {
