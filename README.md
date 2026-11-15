@@ -21,7 +21,7 @@ Self-hosted, open-source quality engineering with AI that reasons and a Rust eng
 
 ---
 
-ORYN turns requirements and source code into executable Gherkin scenarios, runs them on
+ORYN turns requirements and source code into executable and testable scenarios, runs them on
 browser and API workers you host, and explains failures from recorded evidence. Models
 help plan and interpret; they never decide whether a test passed. Every verdict comes
 from assertions the Rust execution engine checked, and every AI suggestion waits for a
