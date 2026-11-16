@@ -2,6 +2,7 @@
 import Editor, { type BeforeMount, type Monaco, type OnMount } from "@monaco-editor/react";
 import { useEffect, useRef } from "react";
 import { Skeleton } from "@/components/ui/states";
+import { useResolvedTheme, type ResolvedTheme } from "@/lib/theme";
 
 type CodeEditor = Parameters<OnMount>[0];
 export type EditorDiagnostic = { line: number; message: string; severity: "error" | "warning" };
@@ -32,8 +33,11 @@ function strip(hex: string | undefined) {
 
 let registered = false;
 
-/** Register the Gherkin tokenizer and the `oryn-paper` theme (colours read from tokens.css at mount). */
-function setup(monaco: Monaco) {
+/**
+ * Register the Gherkin tokenizer and (re)define the `oryn-paper` theme. Colours are read from
+ * the tokens currently on <html>, so call again after a light/dark switch.
+ */
+function setup(monaco: Monaco, mode: ResolvedTheme) {
   if (!registered) {
     registered = true;
     monaco.languages.register({ id: "gherkin" });
@@ -103,7 +107,7 @@ function setup(monaco: Monaco) {
     "focusBorder": t.accent,
   };
   monaco.editor.defineTheme("oryn-paper", {
-    base: "vs",
+    base: mode === "dark" ? "vs-dark" : "vs",
     inherit: true,
     rules: [
       { token: "", foreground: strip(t.ink) },
@@ -144,7 +148,20 @@ export function GherkinEditor({
   const editorRef = useRef<CodeEditor | null>(null);
   const monacoRef = useRef<Monaco | null>(null);
 
-  const beforeMount: BeforeMount = (monaco) => setup(monaco);
+  const mode = useResolvedTheme();
+  const beforeMount: BeforeMount = (monaco) => setup(monaco, mode);
+
+  // Re-read the tokens after a theme switch. The frame wait lets <html data-theme> update first
+  // (ThemeSync's effect runs after this one, being higher in the tree).
+  useEffect(() => {
+    const monaco = monacoRef.current;
+    if (!monaco) return;
+    const frame = requestAnimationFrame(() => {
+      setup(monaco, mode);
+      monaco.editor.setTheme("oryn-paper");
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [mode]);
   const onMount: OnMount = (ed, monaco) => {
     editorRef.current = ed;
     monacoRef.current = monaco;

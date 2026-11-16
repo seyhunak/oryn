@@ -1,0 +1,39 @@
+/* Dark mode (design.md § Dark mode). Same roles as tokens.css, re-lit for a dark room:
+   green-black ground, warm paper-white ink, one lighter green accent, failure stays the only red.
+   Applies when the user picks Dark in Settings → Appearance (`data-theme="dark"` on <html>),
+   or when they leave it on System and the OS is dark. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-paper: oklch(17.5% 0.012 170); --color-paper-2: oklch(20.5% 0.016 168); --color-paper-3: oklch(25.5% 0.022 165);
+  --color-ink: oklch(94% 0.012 95); --color-ink-2: oklch(84% 0.014 120); --color-muted: oklch(68% 0.02 160);
+  --color-rule: oklch(33% 0.02 160);
+  --color-accent: oklch(72% 0.13 160); --color-accent-deep: oklch(62% 0.12 162); --color-accent-soft: oklch(34% 0.06 160); --color-accent-ink: oklch(18% 0.03 165);
+  --color-focus: oklch(78% 0.13 160);
+  --color-error: oklch(70% 0.17 27); --color-success: oklch(72% 0.12 150);
+  --p-mon: oklch(40% 0.06 22); --p-tue: oklch(42% 0.06 64); --p-wed: oklch(44% 0.06 98); --p-thu: oklch(40% 0.07 160);
+  --p-fri: oklch(41% 0.05 210); --p-sat: oklch(40% 0.05 270); --p-sun: oklch(40% 0.05 322);
+  --light: oklch(27% 0.02 165); --glint: oklch(42% 0.02 165);
+  --white: oklch(21.5% 0.016 168);
+  --scrim: oklch(5% 0.01 170 / 0.6);
+  --shadow-card: 0 1px 2px oklch(0% 0 0 / 0.4), 0 24px 48px -24px oklch(0% 0 0 / 0.6);
+  --shadow-lift: 0 1px 1px oklch(0% 0 0 / 0.4), 8px 18px 28px -14px oklch(0% 0 0 / 0.55), 18px 40px 60px -30px oklch(0% 0 0 / 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-paper: oklch(17.5% 0.012 170); --color-paper-2: oklch(20.5% 0.016 168); --color-paper-3: oklch(25.5% 0.022 165);
+    --color-ink: oklch(94% 0.012 95); --color-ink-2: oklch(84% 0.014 120); --color-muted: oklch(68% 0.02 160);
+    --color-rule: oklch(33% 0.02 160);
+    --color-accent: oklch(72% 0.13 160); --color-accent-deep: oklch(62% 0.12 162); --color-accent-soft: oklch(34% 0.06 160); --color-accent-ink: oklch(18% 0.03 165);
+    --color-focus: oklch(78% 0.13 160);
+    --color-error: oklch(70% 0.17 27); --color-success: oklch(72% 0.12 150);
+    --p-mon: oklch(40% 0.06 22); --p-tue: oklch(42% 0.06 64); --p-wed: oklch(44% 0.06 98); --p-thu: oklch(40% 0.07 160);
+    --p-fri: oklch(41% 0.05 210); --p-sat: oklch(40% 0.05 270); --p-sun: oklch(40% 0.05 322);
+    --light: oklch(27% 0.02 165); --glint: oklch(42% 0.02 165);
+    --white: oklch(21.5% 0.016 168);
+    --scrim: oklch(5% 0.01 170 / 0.6);
+    --shadow-card: 0 1px 2px oklch(0% 0 0 / 0.4), 0 24px 48px -24px oklch(0% 0 0 / 0.6);
+    --shadow-lift: 0 1px 1px oklch(0% 0 0 / 0.4), 8px 18px 28px -14px oklch(0% 0 0 / 0.55), 18px 40px 60px -30px oklch(0% 0 0 / 0.5);
+  }
+}

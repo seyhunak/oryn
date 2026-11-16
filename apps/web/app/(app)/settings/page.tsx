@@ -9,6 +9,7 @@ import { TokensTab } from "@/components/settings/tokens-tab";
 import { AiTab } from "@/components/settings/ai-tab";
 import { ConnectionsTab } from "@/components/settings/connections-tab";
 import { AuditTab } from "@/components/settings/audit-tab";
+import { AppearanceTab } from "@/components/settings/appearance-tab";
 import { Empty } from "@/components/ui/states";
 
 const TABS = [
@@ -19,6 +20,7 @@ const TABS = [
   { id: "ai", label: "AI models" },
   { id: "connections", label: "Repository connections" },
   { id: "audit", label: "Audit log" },
+  { id: "appearance", label: "Appearance" },
 ];
 
 export default function SettingsPage() {
@@ -26,9 +28,11 @@ export default function SettingsPage() {
   const canAudit = useCan("admin");
   return (
     <>
-      <PageHeader title="Settings" description="The workspace, who can use it, how machines and models connect to it, and what changed." />
+      <PageHeader title="Settings" description="The workspace, who can use it, how machines and models connect to it, what changed, and how ORYN looks for you." />
       <UrlTabs tabs={TABS} />
-      {tab === "members" ? (
+      {tab === "appearance" ? (
+        <AppearanceTab />
+      ) : tab === "members" ? (
         <MembersTab />
       ) : tab === "teams" ? (
         <TeamsTab />
