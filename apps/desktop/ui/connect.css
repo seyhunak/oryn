@@ -1,0 +1,154 @@
+:root {
+  --bg: #f7f4ec;
+  --card: #ffffff;
+  --ink: #17201c;
+  --muted: #5d6a63;
+  --line: #d9d4c7;
+  --brand: #1d3a31;
+  --brand-ink: #f7f4ec;
+  --accent: #2f7d5b;
+  --error: #a3322a;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1613;
+    --card: #17201c;
+    --ink: #eef0ea;
+    --muted: #9aa69f;
+    --line: #2c3933;
+    --brand: #7fd1a9;
+    --brand-ink: #0f1613;
+    --accent: #7fd1a9;
+    --error: #f08a80;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.card {
+  width: 100%;
+  max-width: 440px;
+  padding: 36px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.mark {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.lede {
+  margin: 0 0 24px;
+  color: var(--muted);
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+button {
+  padding: 9px 16px;
+  border: 1px solid var(--brand);
+  border-radius: 8px;
+  background: var(--brand);
+  color: var(--brand-ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.status {
+  min-height: 1.5em;
+  margin: 14px 0 0;
+  color: var(--muted);
+}
+
+.status.error {
+  color: var(--error);
+}
+
+.hint {
+  margin: 20px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+code,
+kbd {
+  font: 12px ui-monospace, "SF Mono", Menlo, monospace;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+}

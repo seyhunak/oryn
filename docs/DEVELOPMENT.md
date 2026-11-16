@@ -99,6 +99,7 @@ Commit both files. CI regenerates the web types from `docs/api/openapi.json` and
 |---|---|
 | [`crates/`](../crates) | Rust workspace (12 crates; see [ARCHITECTURE.md](ARCHITECTURE.md#rust-crates)). Migrations are in `crates/oryn-db/migrations`. |
 | [`apps/web/`](../apps/web) | Next.js web app. `app/(app)/` holds the nine sections; `lib/api/` the typed client. |
+| [`apps/desktop/`](../apps/desktop) | macOS app (Tauri): a native window onto an ORYN server. See [DESKTOP.md](DESKTOP.md). |
 | [`adapters/playwright-runner/`](../adapters/playwright-runner) | Node service that executes browser steps and recordings. |
 | [`examples/demo-application/`](../examples/demo-application) | Demo shop with features and planted defects, used by the seed script and CI. |
 | [`scripts/`](../scripts) | `seed.mjs`, `verify-demo.mjs`. |

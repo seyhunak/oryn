@@ -15,7 +15,7 @@ ORYN_LOCAL_IMPORT_ROOT ?= $(CURDIR)/examples
 ORYN_ALLOW_PRIVATE_NETWORK ?= true
 WEB_PORT    ?= 3000
 
-.PHONY: help install deps dev dev-api dev-worker dev-web dev-runner dev-demo build test test-rust test-web test-runner test-demo lint fmt migrate seed demo up down logs openapi clean
+.PHONY: help install deps dev dev-api dev-worker dev-web dev-runner dev-demo build test test-rust test-web test-runner test-demo lint fmt migrate seed demo up down logs openapi desktop desktop-dev clean
 
 help: ## Show this help
 	@grep -hE '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[1m%-12s\033[0m %s\n", $$1, $$2}'
@@ -103,6 +103,12 @@ openapi: ## Regenerate docs/api/openapi.json and the web client types from the r
 	curl -fsS http://localhost:8080/api/openapi.json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>console.log(JSON.stringify(JSON.parse(s),null,2)))" > docs/api/openapi.json
 	cd apps/web && pnpm api:types
 
+desktop: ## Build the macOS app (apps/desktop/src-tauri/target/release/bundle)
+	cd apps/desktop && npm ci && npx tauri build
+
+desktop-dev: ## Run the macOS app against ORYN_SERVER_URL (default http://localhost:3000)
+	cd apps/desktop && npm ci && npx tauri dev
+
 clean: ## Remove build outputs
 	cargo clean
-	rm -rf apps/web/.next adapters/playwright-runner/dist data
+	rm -rf apps/web/.next adapters/playwright-runner/dist apps/desktop/src-tauri/target data

@@ -77,6 +77,9 @@ make install && make dev   # API :8080, web :3000, runner :7400, demo app :4000
 make demo                  # seed, then run every demo suite
 ```
 
+On a Mac, `make desktop` builds **ORYN.app**: a native window that connects to any ORYN
+server, local or shared. See [docs/DESKTOP.md](docs/DESKTOP.md).
+
 ## How it fits together
 
 ```mermaid
@@ -129,6 +132,7 @@ Read more in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 | [Security](docs/SECURITY.md) | Threat model and controls |
 | [Development](docs/DEVELOPMENT.md) | Running, testing, contributing code |
 | [Deployment](docs/DEPLOYMENT.md) | Compose, Kubernetes, production checklist |
+| [macOS app](docs/DESKTOP.md) | Building and using ORYN.app |
 | [Implementation status](docs/IMPLEMENTATION_STATUS.md) | What is built and how it was verified |
 | [Decisions](docs/decisions/) | Architecture decision records |
 | [Browser protocol](docs/protocol/browser-v1.md) | `oryn.browser/v1` |

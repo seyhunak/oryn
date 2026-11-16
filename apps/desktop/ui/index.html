@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ORYN</title>
+    <link rel="stylesheet" href="connect.css" />
+  </head>
+  <body>
+    <main class="card">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="8" fill="#1d3a31" />
+        <circle cx="16" cy="16" r="8.5" fill="none" stroke="#f7f4ec" stroke-width="2.5" />
+        <circle cx="16" cy="16" r="3" fill="#7fd1a9" />
+      </svg>
+      <h1>Connect to ORYN</h1>
+      <p class="lede">Enter the address of the ORYN web UI you want to use.</p>
+
+      <form id="connect-form" novalidate>
+        <label for="server-url">Server address</label>
+        <input
+          id="server-url"
+          name="server-url"
+          type="text"
+          inputmode="url"
+          autocomplete="url"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="http://localhost:3000"
+        />
+        <div class="actions">
+          <button id="connect" type="submit">Connect</button>
+          <button id="open-anyway" type="button" class="secondary" hidden>Open anyway</button>
+        </div>
+      </form>
+
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+
+      <p class="hint">
+        No server yet? Run <code>make up</code> in the ORYN repository, then connect to
+        <code>http://localhost:3000</code>. Open this screen again with <kbd>⌘</kbd><kbd>,</kbd>.
+      </p>
+    </main>
+    <script src="connect.js"></script>
+  </body>
+</html>

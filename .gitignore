@@ -28,3 +28,7 @@ next-env.d.ts
 
 # Local tooling config (machine-specific paths)
 .claude/
+
+# Desktop app (Tauri) build output and generated schemas
+/apps/desktop/src-tauri/target/
+/apps/desktop/src-tauri/gen/
