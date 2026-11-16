@@ -11,6 +11,9 @@ Self-hosted, open-source quality engineering with AI that reasons and a Rust eng
 [![Rust](https://img.shields.io/badge/rust-1.85%2B-1d3a31?logo=rust)](https://www.rust-lang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-16-1d3a31?logo=nextdotjs)](https://nextjs.org/)
 [![Playwright](https://img.shields.io/badge/browsers-Playwright-1d3a31?logo=playwright)](https://playwright.dev/)
+[![macOS app](https://img.shields.io/badge/macOS-app-1d3a31?logo=apple&logoColor=white)](docs/DESKTOP.md)
+[![Tauri](https://img.shields.io/badge/Tauri-2-1d3a31?logo=tauri&logoColor=white)](https://tauri.app/)
+[![Light and dark mode](https://img.shields.io/badge/theme-light%20%7C%20dark-2f7d5b)](design.md#dark-mode)
 [![Self-hosted](https://img.shields.io/badge/self--hosted-yes-2f7d5b)](docs/DEPLOYMENT.md)
 [![Built with Claude](https://img.shields.io/badge/built%20with-Claude-d97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-2f7d5b.svg)](CONTRIBUTING.md)
@@ -30,6 +33,8 @@ human to approve it.
 It works fully without any AI provider. Plug in Anthropic Claude, OpenAI, Azure OpenAI,
 Gemini, Ollama or any OpenAI-compatible endpoint when you want help.
 
+Use it in the browser or as a native **macOS app**, in **light or dark mode**.
+
 ## Screenshots
 
 ![Overview: pass rate, executions, flaky scenarios and the latest failures across projects](docs/images/overview.png)
@@ -39,6 +44,10 @@ Gemini, Ollama or any OpenAI-compatible endpoint when you want help.
 | [![Test Studio: Gherkin editor with live validation and per-scenario approval](docs/images/test-studio.png)](docs/images/test-studio.png) | [![Execution detail: scenario results and deterministic failure investigations](docs/images/execution-detail.png)](docs/images/execution-detail.png) | [![Quality Intelligence: pass rate, failure rate, flakiness and outcomes per day](docs/images/quality.png)](docs/images/quality.png) |
 
 Screenshots show the seeded Northwind demo project (`make demo`).
+
+[![ORYN.app on macOS in dark mode, on the Settings → Appearance tab with System, Light and Dark](docs/images/macos-app-appearance.png)](docs/images/macos-app-appearance.png)
+
+*ORYN.app on macOS in dark mode. Settings → Appearance switches between System, Light and Dark.*
 
 ## What it does
 
@@ -52,6 +61,8 @@ Screenshots show the seeded Northwind demo project (`make demo`).
 | **Failure investigation** | Deterministic rules classify each failure (application defect, test defect, environment, dependency, auth, flaky) from observations. An optional, clearly labelled AI interpretation explains what they likely mean. |
 | **Quality intelligence** | Pass rate, flakiness, coverage, trends and recommendations with [documented formulas](docs/METRICS.md). Regression selection ranks the scenarios a change most likely affects. |
 | **Execution fabric** | Stateless Rust workers lease jobs from a Postgres queue and delegate browsers to an isolated Playwright runner. Scale by adding workers. |
+| **macOS app** | ORYN.app, a native Tauri window onto any ORYN server, local or shared. It checks the server's health before opening, remembers your choice, and switches servers with <kbd>⌘</kbd><kbd>,</kbd>. See [docs/DESKTOP.md](docs/DESKTOP.md). |
+| **Light & dark mode** | Settings → Appearance: System, Light or Dark, saved per browser and applied before first paint, so there's no flash. The whole web UI follows it. |
 | **Governance** | Workspaces, teams, roles, project-level access, OIDC single sign-on, API tokens with role ceilings, an audit log, encrypted credentials and SSRF protection. |
 
 ## Quick start
@@ -77,8 +88,20 @@ make install && make dev   # API :8080, web :3000, runner :7400, demo app :4000
 make demo                  # seed, then run every demo suite
 ```
 
-On a Mac, `make desktop` builds **ORYN.app**: a native window that connects to any ORYN
-server, local or shared. See [docs/DESKTOP.md](docs/DESKTOP.md).
+### macOS app
+
+ORYN.app is a native macOS window onto an ORYN server. It's built with [Tauri 2](https://tauri.app/)
+and stays small (about 6.5 MB) because it uses the system WebView. Start a server with
+`make up` or `make dev`, or use a shared one, then:
+
+```bash
+make desktop   # needs Rust, Node 20+ and Xcode command-line tools
+open apps/desktop/src-tauri/target/release/bundle/macos/ORYN.app
+```
+
+It connects to `http://localhost:3000` by default. Pick another server on the connect
+screen or with <kbd>⌘</kbd><kbd>,</kbd>. The build is unsigned, so the first time you
+open it, Control-click it and choose **Open**. More in [docs/DESKTOP.md](docs/DESKTOP.md).
 
 ## How it fits together
 
