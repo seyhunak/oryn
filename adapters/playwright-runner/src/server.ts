@@ -65,7 +65,7 @@ export interface RunnerServer {
 }
 
 export function createRunnerServer(config: Config): RunnerServer {
-  const pool = new BrowserPool();
+  const pool = new BrowserPool({ autoInstall: config.autoInstall });
   const recordings = new RecordingManager(config.recorderHeadless);
   const slots = new Semaphore(config.maxConcurrency);
 
