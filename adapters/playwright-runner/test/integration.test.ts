@@ -73,6 +73,7 @@ before(async () => {
     runTimeoutMs: 60_000,
     maxConcurrency: 2,
     recorderHeadless: true,
+    autoInstall: [],
   });
   runnerUrl = `http://127.0.0.1:${await listen(runner.server)}`;
 });
@@ -237,7 +238,7 @@ test('every_step screenshots, video and trace artifacts', { skip }, async () => 
 });
 
 test('run timeout aborts and skips the remaining steps', { skip }, async () => {
-  const short = createRunnerServer({ port: 0, host: '127.0.0.1', token: null, runTimeoutMs: 800, maxConcurrency: 1, recorderHeadless: true });
+  const short = createRunnerServer({ port: 0, host: '127.0.0.1', token: null, runTimeoutMs: 800, maxConcurrency: 1, recorderHeadless: true, autoInstall: [] });
   const port = await listen(short.server);
   try {
     const res = await fetch(`http://127.0.0.1:${port}/v1/runs`, {

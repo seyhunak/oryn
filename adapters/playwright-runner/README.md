@@ -53,6 +53,7 @@ curl -s -X POST localhost:7400/v1/runs -H 'content-type: application/json' -d '{
 | `MAX_CONCURRENCY` | `2` | Runs executed in parallel; extra runs queue (FIFO) |
 | `ORYN_RUN_TIMEOUT_MS` | `300000` | Upper bound for one run; when exceeded the run is `aborted` |
 | `ORYN_RECORDER_HEADLESS` | unset | `1` runs the recorder headless (for tests/CI only) |
+| `ORYN_RUNNER_AUTO_INSTALL` | `chromium` | Engines the runner downloads itself (`playwright install <engine>`) when their executable is missing, e.g. after a Playwright upgrade. Comma-separated; `none` disables. While installing, `/v1/health` reports the engine unavailable and the worker keeps its browser jobs queued |
 
 ## Endpoints
 
